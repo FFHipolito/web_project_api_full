@@ -8,6 +8,7 @@ node_modules
 
 # Diretório de cache npm opcional
 .npm
+.env
 
 # Arquivos do sistema e pastas de configurações IDE
 .DS_Store
