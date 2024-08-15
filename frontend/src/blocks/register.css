@@ -1,0 +1,110 @@
+.register {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 60px;
+  color: #fff;
+  font-family: Inter;
+}
+
+.register__welcome {
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.register__form {
+  width: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.register__input {
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 8px;
+  padding-top: 20px;
+  padding-left: 0;
+  border: none;
+  border-bottom: 1px solid #fff;
+  background-color: transparent;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.register__input:focus {
+  box-shadow: 0 0 0 0;
+  border: 1px solid black;
+  outline: 0;
+}
+
+.register__button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 216px;
+}
+
+.register__button {
+  width: 360px;
+  background-color: white;
+  color: black;
+  padding: 10px 20px;
+  font-size: 18px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 400;
+}
+
+.register__button:hover {
+  background-color: #e0e0e0;
+}
+
+.register__signin {
+  display: flex;
+  margin-top: 15px;
+  color: white;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.register__signin-text {
+  margin: 0 auto 80px;
+}
+
+.link {
+  margin-left: 5px;
+  color: white;
+  text-decoration: none;
+}
+
+.register__signin-link:hover {
+  color: #ccc;
+}
+
+@media only screen and (max-width: 1000px) {
+  .register {
+    height: 570px;
+    margin-top: 30px;
+  }
+}
+
+@media only screen and (max-width: 683px) {
+  .register {
+    width: 320px;
+  }
+
+  .register__form {
+    width: 320px;
+  }
+
+  .register__input {
+    width: 260px;
+  }
+
+  .register__button {
+    width: 260px;
+  }
+}

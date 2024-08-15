@@ -1,0 +1,33 @@
+.header {
+  max-width: 880px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 45px 0;
+  border-bottom: 1px solid #545454;
+}
+
+.header__item {
+  color: white;
+  text-decoration: none;
+}
+
+@media only screen and (max-width: 1000px) {
+  .header {
+    width: 85%;
+  }
+}
+
+@media only screen and (max-width: 683px) {
+  .header {
+    padding: 32px 0;
+  }
+
+  .header__logo {
+    width: 126px;
+  }
+
+  .header__item {
+    font-size: 14px;
+  }
+}

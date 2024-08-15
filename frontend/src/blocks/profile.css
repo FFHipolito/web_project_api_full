@@ -1,0 +1,145 @@
+.profile {
+  margin: 45px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile__info {
+  display: flex;
+}
+
+.profile__avatar-edit {
+  padding: 0;
+  background: url(../images/img-icon.png) center no-repeat;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s ease-in;
+}
+
+.profile__image {
+  width: 135px;
+  height: 130px;
+  display: flex;
+  align-self: center;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile__image:hover {
+  opacity: 0.2;
+}
+
+.profile__info-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 30px;
+  max-width: 415px;
+}
+
+.profile__title-container {
+  display: flex;
+  margin-bottom: 12px;
+}
+
+.profile__title {
+  margin: 0;
+  font-weight: 500;
+  font-size: 42px;
+  line-height: 48px;
+}
+
+.profile__title,
+.profile__subtitle {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.profile__title-button {
+  width: 24px;
+  height: 24px;
+  background-color: black;
+  border: 1px solid #ffff;
+  align-self: center;
+  margin: 6px 0 0 18px;
+  padding: 0;
+  cursor: pointer;
+}
+
+.profile__title-button:hover {
+  opacity: 0.7;
+}
+
+.profile__subtitle {
+  margin: 0;
+}
+
+.profile__addbutton {
+  width: 150px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  border: 2px solid #ffff;
+  border-radius: 2px;
+  padding: 0;
+  cursor: pointer;
+}
+
+.profile__addbutton:hover {
+  opacity: 0.7;
+}
+
+@media only screen and (max-width: 1000px) {
+  .profile {
+    width: 85%;
+    margin: 45px auto;
+  }
+  .profile__info-container {
+    margin: 0px 30px;
+  }
+
+  .profile__title {
+    font-size: 30px;
+  }
+}
+
+@media only screen and (max-width: 683px) {
+  .profile,
+  .profile__info {
+    flex-direction: column;
+  }
+  .profile__info {
+    align-items: center;
+  }
+  .profile__info-container {
+    text-align: center;
+    margin: 30px 0;
+  }
+  .profile__title {
+    font-size: 22px;
+    line-height: 22.63px;
+  }
+  .profile__title-button {
+    width: 16px;
+    height: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 0 0 8px;
+  }
+  .profile__subtitle {
+    font-size: 14px;
+    line-height: 16.94px;
+  }
+  .profile__addbutton {
+    width: 100%;
+  }
+  .profile__addbutton-img {
+    width: 16px;
+    height: 16px;
+  }
+}
