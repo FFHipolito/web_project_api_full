@@ -68,15 +68,17 @@ function Main({
 
         <div className="elements">
           {Array.isArray(cards) && cards.length > 0 ? (
-            cards.map((card) => (
-              <Card
-                cardData={card}
-                key={card._id}
-                onCardClick={onCardClick}
-                onCardDelete={onCardDelete}
-                onCardLike={onCardLike}
-              />
-            ))
+            cards.map((card) => {
+              return (
+                <Card
+                  cardData={card}
+                  key={card._id}
+                  onCardClick={onCardClick}
+                  onCardDelete={onCardDelete}
+                  onCardLike={onCardLike}
+                />
+              );
+            })
           ) : (
             <p>Nenhum card encontrado.</p>
           )}

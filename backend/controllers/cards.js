@@ -2,6 +2,7 @@ const Card = require("../models/card");
 
 function getCards(req, res) {
   return Card.find({})
+    .populate("owner")
     .then((cards) => {
       if (!cards) {
         const err = new Error("Ocorreu um erro ao buscar cards");

@@ -47,13 +47,7 @@ function getUserInfo(req, res, next) {
 }
 
 function createUser(req, res, next) {
-  const {
-    name = "Jacques Cousteau",
-    about = "Explorer",
-    avatar = "link",
-    email,
-    password,
-  } = req.body;
+  const { name, about, avatar, email, password } = req.body;
   try {
     if (!email || !password) {
       const err = new Error("Dados inválidos...");
@@ -66,17 +60,17 @@ function createUser(req, res, next) {
 
   bcrypt
     .hash(password, 10)
-    .then((hash) =>
-      User.create({
+    .then((hash) => {
+      return User.create({
         name,
         about,
         avatar,
         email,
         password: hash,
-      })
-    )
+      });
+    })
     .then((user) => {
-      res.status(201).send({
+      return res.status(201).send({
         data: {
           name: user.name,
           about: user.about,
@@ -88,7 +82,7 @@ function createUser(req, res, next) {
     .catch(next);
 }
 
-function updateUserProfile(req, res) {
+function updateUserProfile(req, res, next) {
   const { name, about } = req.body;
   const userId = req.user._id;
   const userUpdated = {};
@@ -118,7 +112,7 @@ function updateUserProfile(req, res) {
     .catch(next);
 }
 
-function updateUserAvatar(req, res) {
+function updateUserAvatar(req, res, next) {
   const { avatar } = req.body;
   const userId = req.user._id;
 

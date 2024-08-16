@@ -30,7 +30,6 @@ function App() {
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
-    console.log(token);
     if (token) {
       auth
         .checkToken(token)
@@ -42,9 +41,10 @@ function App() {
           console.error("Erro ao verificar token:", error);
           setLoggedIn(false);
         });
+
       api
         .getUserInfo()
-        .then(setCurrentUser)
+        .then((user) => setCurrentUser(user.data))
         .catch((error) => console.log(error));
 
       api
@@ -62,7 +62,7 @@ function App() {
     api
       .editProfile(userData)
       .then((userInfo) => {
-        setCurrentUser(userInfo);
+        setCurrentUser(userInfo.data);
         closeAllPopups();
       })
       .catch((error) => console.log(error));
@@ -86,7 +86,7 @@ function App() {
     api
       .editAvatar(userData)
       .then((userInfo) => {
-        setCurrentUser(userInfo);
+        setCurrentUser(userInfo.data);
         closeAllPopups();
       })
       .catch((error) => console.log(error));
@@ -96,7 +96,7 @@ function App() {
     api
       .createNewCard(newCardData)
       .then((newCard) => {
-        setCards([newCard, ...cards]);
+        api.getInitialCards().then((data) => setCards(data.data));
         closeAllPopups();
       })
       .catch((error) => console.log(error));
@@ -106,23 +106,26 @@ function App() {
     api
       .deleteCard(card._id)
       .then(() => {
-        setCards((state) => state.filter((c) => c._id !== card._id));
+        api.getInitialCards().then((data) => setCards(data.data));
       })
       .catch((error) => console.log(error));
   };
 
-  const handleCardLike = (card) => {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+  function handleCardLike(card) {
+    const isLiked = card.likes.some((i) => i === currentUser._id);
 
     api
       .changeLikeCardStatus(card._id, isLiked)
       .then((newCard) => {
-        setCards((state) =>
-          state.map((c) => (c._id === card._id ? newCard : c))
-        );
+        api
+          .getInitialCards()
+          .then((data) => setCards(data.data))
+          .catch((error) => {
+            console.error("Erro ao buscar dados dos cartões:", error);
+          });
       })
-      .catch((error) => console.log(error));
-  };
+      .catch(console.log);
+  }
 
   const closeAllPopups = () => {
     setAddPlacePopupOpen(false);

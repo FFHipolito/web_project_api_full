@@ -8,10 +8,9 @@ const cors = require("cors");
 const { errors, celebrate, Joi } = require("celebrate");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 const { login, createUser } = require("./controllers/users");
-const authMiddleware = require("./middlewares/authMiddleware");
 const { validateURL } = require("./utils/validate");
-
-const { PORT = 3000 } = process.env;
+const auth = require("./middlewares/auth");
+const PORT = process.env.PORT || 3000;
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -67,7 +66,7 @@ app.use(
 );
 
 app.use("/users", usersRouter);
-app.use("/cards", authMiddleware, cardsRouter);
+app.use("/cards", cardsRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "A solicitação não foi encontrada" });
@@ -84,15 +83,12 @@ app.use((err, req, res, next) => {
 });
 
 mongoose
-  .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect("mongodb://localhost:27017/aroundb")
   .then(() => {
-    console.log("MongoDB connected...");
+    console.log(`MongoDB connected...`);
 
     app.listen(PORT, () => {
-      console.log(`Listening on port ${PORT}`);
+      console.log(`listening on port ${PORT}`);
     });
   })
   .catch((err) => {

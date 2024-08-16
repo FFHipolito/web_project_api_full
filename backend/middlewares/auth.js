@@ -1,24 +1,36 @@
+require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
-const authMiddleware = (req, res, next) => {
-  const authHeader = req.headers["authorization"];
+const { NODE_ENV, JWT_SECRET } = process.env;
 
-  if (!authHeader) {
-    return res
-      .status(403)
-      .json({ message: "Acesso não autorizado. Token não fornecido." });
-  }
-
-  const token = authHeader.split(" ")[1];
-
-  try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = payload;
-
-    next();
-  } catch (error) {
-    res.status(403).json({ message: "Acesso não autorizado. Token inválido." });
-  }
+const handleAuthError = (res, next) => {
+  const err = new Error("Autorização necessária");
+  err.statusCode = 403;
+  next(err);
 };
 
-module.exports = authMiddleware;
+const extractBearerToken = (header) => header.replace("Bearer ", "");
+
+module.exports = (req, res, next) => {
+  const { authorization } = req.headers;
+
+  if (!authorization || !authorization.startsWith("Bearer ")) {
+    return handleAuthError(res, next);
+  }
+
+  const token = extractBearerToken(authorization);
+  let payload;
+
+  try {
+    payload = jwt.verify(
+      token,
+      NODE_ENV === "production" ? JWT_SECRET : "super-strong-secret"
+    );
+  } catch (err) {
+    return handleAuthError(res);
+  }
+
+  req.user = payload;
+
+  return next();
+};

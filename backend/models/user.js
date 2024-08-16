@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const isEmail = require("validator/lib/isEmail");
+const validator = require("validator");
 const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema({
