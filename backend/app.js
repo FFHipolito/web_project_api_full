@@ -19,6 +19,37 @@ app.use(bodyParser.json());
 app.use(cors());
 app.options("*", cors());
 
+const allowedCors = [
+  "https://myaround.mooo.com",
+  "http://myaround.mooo.com",
+  "localhost:3000",
+];
+
+app.use(function (req, res, next) {
+  const { origin } = req.headers;
+
+  if (allowedCors.includes(origin)) {
+    if (allowedCors.includes(origin)) {
+      res.header("Access-Control-Allow-Origin", origin);
+      res.header("Access-Control-Allow-Origin", "*");
+      const { method } = req;
+
+      const DEFAULT_ALLOWED_METHODS = "GET,HEAD,PUT,PATCH,POST,DELETE";
+
+      if (method === "OPTIONS") {
+        res.header("Access-Control-Allow-Methods", DEFAULT_ALLOWED_METHODS);
+      }
+      const requestHeaders = req.headers["access-control-request-headers"];
+      if (method === "OPTIONS") {
+        res.header("Access-Control-Allow-Headers", requestHeaders);
+        return res.end();
+      }
+    }
+  }
+
+  next();
+});
+
 app.use(requestLogger);
 
 app.use(express.json());
