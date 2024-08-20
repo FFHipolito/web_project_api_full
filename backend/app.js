@@ -10,7 +10,7 @@ const { requestLogger, errorLogger } = require("./middlewares/logger");
 const { login, createUser } = require("./controllers/users");
 const { validateURL } = require("./utils/validate");
 const auth = require("./middlewares/auth");
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -22,7 +22,7 @@ app.options("*", cors());
 const allowedCors = [
   "https://myaround.mooo.com",
   "http://myaround.mooo.com",
-  "localhost:3000",
+  "localhost:3001",
 ];
 
 app.use(function (req, res, next) {

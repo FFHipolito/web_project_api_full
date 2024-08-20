@@ -61,7 +61,7 @@ class Api {
   }
 }
 
-const api = new Api("https://localhost:3000", {
+const api = new Api("http://localhost:3001", {
   //https://api.myaround.mooo.com
   headers: {
     Authorization: `Bearer ${localStorage.getItem("jwt")}`,
