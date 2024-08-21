@@ -96,7 +96,10 @@ function App() {
     api
       .createNewCard(newCardData)
       .then((newCard) => {
-        api.getInitialCards().then((data) => setCards(data.data));
+        setCards((prevCards) => {
+          const updatedCards = [newCard.data, ...prevCards];
+          return updatedCards;
+        });
         closeAllPopups();
       })
       .catch((error) => console.log(error));

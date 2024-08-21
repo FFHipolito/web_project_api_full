@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 import Card from "./Card.js";
-import caneta from "../images/caneta.png";
-import mais from "../images/mais.png";
+import penIcon from "../images/caneta.png";
+import plusIcon from "../images/mais.png";
 
 function Main({
   cards,
@@ -44,7 +44,7 @@ function Main({
                   onClick={onEditProfileClick}
                 >
                   <img
-                    src={caneta}
+                    src={penIcon}
                     alt="BotÃĢo com uma caneta dentro"
                     className="profile__info-image"
                   />
@@ -59,7 +59,7 @@ function Main({
             onClick={onAddPlaceClick}
           >
             <img
-              src={mais}
+              src={plusIcon}
               alt="BotÃĢo com o sinal de mais dentro"
               className="profile__addbutton-img"
             />

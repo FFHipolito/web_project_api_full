@@ -3,6 +3,7 @@ const Card = require("../models/card");
 function getCards(req, res) {
   return Card.find({})
     .populate("owner")
+    .sort({ createdAt: -1 })
     .then((cards) => {
       if (!cards) {
         const err = new Error("Ocorreu um erro ao buscar cards");
@@ -13,7 +14,7 @@ function getCards(req, res) {
     })
     .catch((err) => {
       console.log("getCards Error:", err);
-      res.status(err.status).send({ error: err.message });
+      res.status(err.status || 500).send({ error: err.message });
     });
 }
 
