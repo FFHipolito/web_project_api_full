@@ -1,16 +1,35 @@
-# web_project_around_express
+# web_project_api_full
 
 ## Api usando Node.j e Express.js
 
-Esta é uma API desenvolvida em Node.js utilizando o framework Express.js. A API fornece endpoints para realizar operações CRUD (Create, Read, Update, Delete) em um recurso específico. A finalidade desta API é servir como um exemplo prático de como criar e estruturar uma API RESTful com Node.js e Express.js.
+Este projeto consiste na criação de uma página web onde os usuários podem se registrar, fazer login, adicionar, remover e curtir fotos, além de editar informações e o avatar de seus perfis. Foram utilizadas biblioteca React para criar o aplicativo, foi feita refatoração do código do projeto anterior e adicionada uma página de registro e login com rotas protegidas, além disso, foi feita a criação de um servidor.
 
 ## Funcionalidades
 
-Criar um novo recurso
-Listar todos os recursos
-Buscar um recurso específico por ID
-Atualizar um recurso existente por ID
-Deletar um recurso por ID
+Utilização de Estados e Contextos para os botões de abertura e fechamento dos popups, submit e like dos cartões.
+Utilização dos Hooks Route, Switch, withRouter e useHistory para navegação entre páginas.
+Proteção da página principal com o componente "Protected Route", acessível apenas através do login de usuário registrado.
+Utilização do componente "Infotooltip" para alertar o usuário sobre o sucesso ou falha no registro.
+Implementação da Autorização para a URL própria, utilizando o método POST para login e registro e GET para obtenção do token que permite que o usuário permaneça logado.
+Criação de uma API própria.
+Criação de Esquemas e Modelos (GET, POST, PUT, DELETE para os cartões; GET e PATCH para usuários).
+Criação de rotas e controladores.
+Manipulacao de erros centralizada.
+
+## Tecnologias Utilizadas
+
+### Back-end
+
+JavaScript
+Node.js
+Express
+
+### Front-end
+
+HTML
+CSS
+JavaScript/JSX
+React
 
 ## Requisitos
 
