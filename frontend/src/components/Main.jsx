@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
-import Card from "./Card.js";
+import { CurrentUserContext } from "../contexts/CurrentUserContext.jsx";
+import Card from "./Card.jsx";
 import penIcon from "../images/caneta.png";
 import plusIcon from "../images/mais.png";
 

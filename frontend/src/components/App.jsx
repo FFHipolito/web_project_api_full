@@ -1,10 +1,10 @@
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
-import Header from "./Header.js";
-import Main from "./Main.js";
-import Footer from "./Footer.js";
-import ImagePopup from "./ImagePopup.js";
+import { CurrentUserContext } from "../contexts/CurrentUserContext.jsx";
+import Header from "./Header.jsx";
+import Main from "./Main.jsx";
+import Footer from "./Footer.jsx";
+import ImagePopup from "./ImagePopup.jsx";
 import api from "../utils/api";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
