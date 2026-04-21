@@ -78,7 +78,7 @@ const Login = ({ handleLogin }) => {
           id="password"
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Senha"
-          minLength={6}
+          minLength={8}
           required
           className="auth__input login__input"
         />

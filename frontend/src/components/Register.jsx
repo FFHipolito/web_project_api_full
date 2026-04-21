@@ -104,7 +104,7 @@ class Register extends React.Component {
               id="password"
               onChange={this.handleChange}
               placeholder="Senha"
-              minLength={6}
+              minLength={8}
               className="auth__input register__input"
               required
             />
