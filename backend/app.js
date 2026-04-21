@@ -89,8 +89,9 @@ app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
   console.error("Server Error:", err);
   res.status(statusCode).send({
-    message: statusCode === 500 ? "Ocorreu um erro no servidor" : message,
-    detail: process.env.NODE_ENV !== "production" ? err.stack : undefined
+    message: message,
+    stack: err.stack,
+    detail: err
   });
 });
 
