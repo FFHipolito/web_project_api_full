@@ -1,174 +1,166 @@
 require("dotenv").config();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const User = require("../models/user");
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
-function getUsers(req, res) {
-  return User.find({})
-    .then((users) => {
-      if (!users) {
-        const err = new Error("Ocorreu um erro ao buscar usuários");
-        err.status = 500;
-        throw err;
-      }
-      res.send({ data: users });
-    })
-    .catch(next);
+async function getUsers(req, res, next) {
+  try {
+    const users = await prisma.user.findMany();
+    res.send({ data: users });
+  } catch (err) {
+    next(err);
+  }
 }
 
-function getUserById(req, res) {
+async function getUserById(req, res, next) {
   const { userId } = req.params;
-  return User.findById(userId)
-    .orFail(() => {
-      const err = new Error("Usuário não encontrado");
-      err.status = 404;
-      throw err;
-    })
-    .then((user) => {
-      res.send({ data: user });
-    })
-    .catch(next);
-}
-
-function getUserInfo(req, res, next) {
-  const { user } = req;
-  return User.findById(user._id)
-    .orFail(() => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+    if (!user) {
       const err = new Error("Usuário não encontrado");
       err.statusCode = 404;
       throw err;
-    })
-    .then((userData) => {
-      res.send({ data: userData });
-    })
-    .catch(next);
+    }
+    res.send({ data: user });
+  } catch (err) {
+    next(err);
+  }
 }
 
-function createUser(req, res, next) {
-  const { name, about, avatar, email, password } = req.body;
+async function getUserInfo(req, res, next) {
+  const { user } = req;
   try {
-    if (!email || !password) {
-      const err = new Error("Dados inválidos...");
-      err.statusCode = 400;
+    const userData = await prisma.user.findUnique({
+      where: { id: user._id },
+    });
+    if (!userData) {
+      const err = new Error("Usuário não encontrado");
+      err.statusCode = 404;
       throw err;
     }
-  } catch (error) {
-    next(error);
+    res.send({ data: userData });
+  } catch (err) {
+    next(err);
   }
-
-  bcrypt
-    .hash(password, 10)
-    .then((hash) => {
-      return User.create({
-        name,
-        about,
-        avatar,
-        email,
-        password: hash,
-      });
-    })
-    .then((user) => {
-      return res.status(201).send({
-        data: {
-          name: user.name,
-          about: user.about,
-          avatar: user.avatar,
-          email: user.email,
-        },
-      });
-    })
-    .catch(next);
 }
 
-function updateUserProfile(req, res, next) {
+async function createUser(req, res, next) {
+  const { name, about, avatar, email, password } = req.body;
+  
+  if (!email || !password) {
+    return res.status(400).send({ message: "Dados inválidos..." });
+  }
+
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = await prisma.user.create({
+      data: {
+        name: name || "Jacques Cousteau",
+        about: about || "Explorer",
+        avatar: avatar || "https://practicum-content.s3.us-west-1.amazonaws.com/resources/moved_avatar_1604080799.jpg",
+        email,
+        password: hashedPassword,
+      },
+    });
+
+    res.status(201).send({
+      data: {
+        id: newUser.id,
+        name: newUser.name,
+        about: newUser.about,
+        avatar: newUser.avatar,
+        email: newUser.email,
+      },
+    });
+  } catch (err) {
+    if (err.code === 'P2002') {
+       return res.status(409).send({ message: "Este e-mail já está em uso" });
+    }
+    next(err);
+  }
+}
+
+async function updateUserProfile(req, res, next) {
   const { name, about } = req.body;
   const userId = req.user._id;
-  const userUpdated = {};
-
-  if (name) {
-    userUpdated.name = name;
-  }
-  if (about) {
-    userUpdated.about = about;
-  }
 
   if (!name && !about) {
-    return res.status(400).send({ error: "Dados inválidos..." });
+    return res.status(400).send({ message: "Dados inválidos..." });
   }
 
-  return User.findByIdAndUpdate(userId, userUpdated, {
-    new: true,
-  })
-    .orFail(() => {
-      const err = new Error("Usuário não encontrado");
-      err.status = 404;
-      throw err;
-    })
-    .then((user) => {
-      res.send({ data: user });
-    })
-    .catch(next);
+  try {
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        name: name || undefined,
+        about: about || undefined,
+      },
+    });
+    res.send({ data: updatedUser });
+  } catch (err) {
+    next(err);
+  }
 }
 
-function updateUserAvatar(req, res, next) {
+async function updateUserAvatar(req, res, next) {
   const { avatar } = req.body;
   const userId = req.user._id;
 
   if (!avatar) {
-    return res.status(400).send({ error: "Dados inválidos..." });
+    return res.status(400).send({ message: "Dados inválidos..." });
   }
 
-  return User.findByIdAndUpdate(
-    userId,
-    {
-      avatar,
-    },
-    {
-      new: true,
-    }
-  )
-    .orFail(() => {
-      const err = new Error("Usuário não encontrado");
-      err.status = 404;
-      throw err;
-    })
-    .then((user) => {
-      res.send({ data: user });
-    })
-    .catch(next);
+  try {
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: { avatar },
+    });
+    res.send({ data: updatedUser });
+  } catch (err) {
+    next(err);
+  }
 }
 
-function login(req, res, next) {
+async function login(req, res, next) {
   const { email, password } = req.body;
-  try {
-    if (!email && !password) {
-      const err = new Error("Dados inválidos...");
-      err.statusCode = 400;
-      throw err;
-    }
-  } catch (error) {
-    next(error);
+  
+  if (!email || !password) {
+    return res.status(400).send({ message: "E-mail e senha são obrigatórios" });
   }
 
-  return User.findUserByCredentials(email, password)
-    .then((user) => {
-      const token = jwt.sign(
-        { _id: user._id },
-        NODE_ENV === "production" ? JWT_SECRET : "super-strong-secret",
-        {
-          expiresIn: "7d",
-        }
-      );
-      if (!token) {
-        const err = new Error("Token inválido...");
-        err.statusCode = 401;
-        throw err;
-      }
-      res.send({ token });
-    })
-    .catch(next);
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      const err = new Error("Senha ou e-mail incorreto");
+      err.statusCode = 401;
+      throw err;
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      const err = new Error("Senha ou e-mail incorreto");
+      err.statusCode = 401;
+      throw err;
+    }
+
+    const token = jwt.sign(
+      { _id: user.id },
+      NODE_ENV === "production" ? JWT_SECRET : "super-strong-secret",
+      { expiresIn: "7d" }
+    );
+
+    res.send({ token });
+  } catch (err) {
+    next(err);
+  }
 }
 
 module.exports = {

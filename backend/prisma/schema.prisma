@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+model User {
+  id       String   @id @default(uuid())
+  name     String   @default("Jacques Cousteau")
+  about    String   @default("Explorer")
+  avatar   String   @default("https://practicum-content.s3.us-west-1.amazonaws.com/resources/moved_avatar_1604080799.jpg")
+  email    String   @unique
+  password String
+  cards    Card[]   @relation("UserCards")
+  likes    Card[]   @relation("UserLikes")
+
+  @@map("users")
+}
+
+model Card {
+  id        String   @id @default(uuid())
+  name      String
+  link      String
+  ownerId   String
+  owner     User     @relation("UserCards", fields: [ownerId], references: [id])
+  likes     User[]   @relation("UserLikes")
+  createdAt DateTime @default(now())
+
+  @@map("cards")
+}

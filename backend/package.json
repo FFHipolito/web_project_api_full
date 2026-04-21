@@ -6,7 +6,9 @@
   "scripts": {
     "lint": "eslint .",
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "build": "prisma db push --accept-data-loss",
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",
@@ -15,7 +17,8 @@
     "eslint": "^8.57.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.29.1",
-    "nodemon": "^3.1.4"
+    "nodemon": "^3.1.4",
+    "prisma": "^5.21.1"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -25,8 +28,8 @@
     "express": "^4.19.2",
     "express-winston": "^4.2.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.5.2",
-    "pg-promise": "^11.9.0",
+    "@prisma/client": "^5.21.1",
+    "morgan": "^1.10.0",
     "validator": "^13.12.0",
     "winston": "^3.14.1"
   }

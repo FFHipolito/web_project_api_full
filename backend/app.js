@@ -1,6 +1,5 @@
 require("dotenv").config();
 const express = require("express");
-const mongoose = require("mongoose");
 const cardsRouter = require("./routes/cards");
 const usersRouter = require("./routes/users");
 const bodyParser = require("body-parser");
@@ -19,39 +18,19 @@ app.use(bodyParser.json());
 app.use(cors());
 app.options("*", cors());
 
-const allowedCors = [
-  "https://myaround.mooo.com",
-  "http://myaround.mooo.com",
-  "localhost:3001",
-];
-
 app.use(function (req, res, next) {
   const { origin } = req.headers;
-
-  if (allowedCors.includes(origin)) {
-    if (allowedCors.includes(origin)) {
-      res.header("Access-Control-Allow-Origin", origin);
-      res.header("Access-Control-Allow-Origin", "*");
-      const { method } = req;
-
-      const DEFAULT_ALLOWED_METHODS = "GET,HEAD,PUT,PATCH,POST,DELETE";
-
-      if (method === "OPTIONS") {
-        res.header("Access-Control-Allow-Methods", DEFAULT_ALLOWED_METHODS);
-      }
-      const requestHeaders = req.headers["access-control-request-headers"];
-      if (method === "OPTIONS") {
-        res.header("Access-Control-Allow-Headers", requestHeaders);
-        return res.end();
-      }
-    }
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  
+  if (req.method === "OPTIONS") {
+    return res.end();
   }
-
   next();
 });
 
 app.use(requestLogger);
-
 app.use(express.json());
 
 app.get("/crash-test", () => {
@@ -108,20 +87,17 @@ app.use(errors());
 
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
+  console.error("Server Error:", err);
   res.status(statusCode).send({
     message: statusCode === 500 ? "Ocorreu um erro no servidor" : message,
+    detail: process.env.NODE_ENV !== "production" ? err.stack : undefined
   });
 });
 
-mongoose
-  .connect("mongodb://localhost:27017/aroundb")
-  .then(() => {
-    console.log(`MongoDB connected...`);
-
-    app.listen(PORT, () => {
-      console.log(`listening on port ${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.log(err);
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => {
+    console.log(`listening on port ${PORT}`);
   });
+}
+
+module.exports = app;
